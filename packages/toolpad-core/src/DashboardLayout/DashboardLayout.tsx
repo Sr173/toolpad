@@ -360,6 +360,10 @@ export interface DashboardLayoutProps {
     toolbarActions?: {};
     toolbarAccount?: AccountProps;
   };
+
+  isMini: boolean
+
+  onMiniChange: (b: boolean) => void
 }
 
 /**
@@ -373,7 +377,7 @@ export interface DashboardLayoutProps {
  * - [DashboardLayout API](https://mui.com/toolpad/core/api/dashboard-layout)
  */
 function DashboardLayout(props: DashboardLayoutProps) {
-  const { children, disableCollapsibleSidebar = false, slots, slotProps } = props;
+  const { children, disableCollapsibleSidebar = false, slots, slotProps, isMini, onMiniChange } = props;
 
   const theme = useTheme();
 
@@ -382,7 +386,7 @@ function DashboardLayout(props: DashboardLayoutProps) {
   const appWindow = React.useContext(WindowContext);
   const applicationTitle = useApplicationTitle();
 
-  const [isDesktopNavigationExpanded, setIsDesktopNavigationExpanded] = React.useState(true);
+  const [isDesktopNavigationExpanded, setIsDesktopNavigationExpanded] = React.useState(isMini);
   const [isMobileNavigationExpanded, setIsMobileNavigationExpanded] = React.useState(false);
 
   const isUnderMdViewport = useMediaQuery(
@@ -407,6 +411,7 @@ function DashboardLayout(props: DashboardLayoutProps) {
       if (isUnderMdViewport) {
         setIsMobileNavigationExpanded(newExpanded);
       } else {
+        onMiniChange(newExpanded)
         setIsDesktopNavigationExpanded(newExpanded);
       }
     },
